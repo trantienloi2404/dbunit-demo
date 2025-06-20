@@ -71,7 +71,13 @@ dbunit-demo/
 
 ### Các bước thực hiện
 
-1. **Chạy toàn bộ demo (recommended)**
+1. **Clone repository (nếu chưa có)**
+   ```bash
+   git clone <repository-url>
+   cd dbunit-demo
+   ```
+
+2. **Chạy toàn bộ demo (recommended)**
    ```bash
    # Trên Linux/macOS
    chmod +x run-demo.sh
@@ -86,13 +92,7 @@ dbunit-demo/
    - Chạy tất cả DBUnit tests
    - Hiển thị kết quả tổng hợp
 
-2. **Clone repository (nếu chưa có)**
-   ```bash
-   git clone <repository-url>
-   cd dbunit-demo
-   ```
-
-3. **Build project**
+3. **Hoặc build project thủ công**
    ```bash
    mvn clean compile
    ```
