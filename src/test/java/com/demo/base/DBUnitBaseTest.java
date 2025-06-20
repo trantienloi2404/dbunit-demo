@@ -32,8 +32,8 @@ public abstract class DBUnitBaseTest {
     public void setUp() throws Exception {
         System.out.println("Setting up database connection for test...");
         
-        // Tạo kết nối H2 in-memory database
-        connection = DatabaseUtil.taoKetNoiH2();
+        // Tạo kết nối MySQL database (ưu tiên)
+        connection = DatabaseUtil.taoKetNoiMacDinh();
         
         // Tạo DBUnit connection wrapper
         dbUnitConnection = new DatabaseConnection(connection);
@@ -46,17 +46,40 @@ public abstract class DBUnitBaseTest {
 
     /**
      * Cleanup sau mỗi test case
-     * Đóng kết nối và giải phóng tài nguyên
+     * Đóng kết nối và dọn dẹp tài nguyên
      */
     @After
     public void tearDown() throws Exception {
         System.out.println("Cleaning up database connection...");
         
-        if (dbUnitConnection != null) {
-            dbUnitConnection.close();
+        try {
+            // Clean up dữ liệu test (quan trọng cho MySQL persistent database)
+            if (connection != null && !connection.isClosed()) {
+                // Xóa dữ liệu test theo thứ tự (con trước, cha sau)
+                try {
+                    connection.createStatement().executeUpdate("DELETE FROM nhan_vien WHERE 1=1");
+                    connection.createStatement().executeUpdate("DELETE FROM phong_ban WHERE 1=1");
+                    // Reset auto increment cho MySQL
+                    connection.createStatement().executeUpdate("ALTER TABLE nhan_vien AUTO_INCREMENT = 1");
+                    connection.createStatement().executeUpdate("ALTER TABLE phong_ban AUTO_INCREMENT = 1");
+                } catch (SQLException e) {
+                    // Ignore cleanup errors in case tables don't exist
+                    System.out.println("Cleanup warning (ignored): " + e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error during cleanup: " + e.getMessage());
         }
         
+        // Đóng DBUnit connection
+        if (dbUnitConnection != null) {
+            dbUnitConnection.close();
+            dbUnitConnection = null;
+        }
+        
+        // Đóng database connection
         DatabaseUtil.dongKetNoi(connection);
+        connection = null;
         
         System.out.println("Database cleanup completed");
     }

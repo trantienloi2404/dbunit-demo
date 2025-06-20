@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <!-- Dữ liệu nhân viên ban đầu cho testing với khóa ngoại và các trường mới -->
+    <!-- Dataset đầy đủ cho testing với khóa ngoại và các trường mới -->
+    
+    <!-- Dữ liệu phòng ban (phải tạo trước vì là bảng cha) -->
+    <phong_ban 
+        id="1"
+        ma_phong_ban="IT"
+        ten_phong_ban="Công nghệ thông tin"
+        mo_ta="Phòng ban phụ trách công nghệ và phát triển phần mềm"
+        truong_phong="Lê Hoàng Cường"
+        so_nhan_vien="3"
+        trang_thai_hoat_dong="true"/>
+        
+    <phong_ban 
+        id="2"
+        ma_phong_ban="HR"
+        ten_phong_ban="Nhân sự"
+        mo_ta="Phòng ban quản lý nhân sự và tuyển dụng"
+        truong_phong="Trần Thị Bình"
+        so_nhan_vien="1"
+        trang_thai_hoat_dong="true"/>
+        
+    <phong_ban 
+        id="3"
+        ma_phong_ban="FIN"
+        ten_phong_ban="Tài chính"
+        mo_ta="Phòng ban quản lý tài chính và kế toán"
+        truong_phong="Phạm Thị Dung"
+        so_nhan_vien="1"
+        trang_thai_hoat_dong="true"/>
+    
+    <!-- Dữ liệu nhân viên (tạo sau vì có khóa ngoại tới phòng ban) -->
     <nhan_vien 
         id="1"
         ho_ten="Nguyễn Văn An"

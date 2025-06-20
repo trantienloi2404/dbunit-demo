@@ -6,24 +6,38 @@ import java.sql.SQLException;
 
 /**
  * Utility class để quản lý kết nối database
- * Hỗ trợ cả H2 in-memory database cho testing và MySQL cho production
+ * Hỗ trợ cả H2 in-memory database cho testing nhanh và MySQL cho production/test chính thức
  */
 public class DatabaseUtil {
     
-    // Cấu hình H2 Database cho testing
+    // Cấu hình H2 Database cho testing nhanh
     private static final String H2_DRIVER = "org.h2.Driver";
     private static final String H2_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL";
     private static final String H2_USER = "sa";
     private static final String H2_PASSWORD = "";
 
-    // Cấu hình MySQL Database
+    // Cấu hình MySQL Database cho test chính thức
     private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/dbunit_demo";
+    private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/dbunit_demo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true";
     private static final String MYSQL_USER = "root";
     private static final String MYSQL_PASSWORD = "";
 
     /**
-     * Tạo kết nối H2 in-memory database cho testing
+     * Tạo kết nối MySQL database (ưu tiên cho test)
+     */
+    public static Connection taoKetNoiMySQL() throws SQLException {
+        try {
+            Class.forName(MYSQL_DRIVER);
+            Connection connection = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
+            System.out.println("Connected to MySQL database successfully");
+            return connection;
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("MySQL Driver not found", e);
+        }
+    }
+
+    /**
+     * Tạo kết nối H2 in-memory database cho testing nhanh
      */
     public static Connection taoKetNoiH2() throws SQLException {
         try {
@@ -37,16 +51,14 @@ public class DatabaseUtil {
     }
 
     /**
-     * Tạo kết nối MySQL database
+     * Tạo kết nối database mặc định (MySQL)
      */
-    public static Connection taoKetNoiMySQL() throws SQLException {
+    public static Connection taoKetNoiMacDinh() throws SQLException {
         try {
-            Class.forName(MYSQL_DRIVER);
-            Connection connection = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
-            System.out.println("Connected to MySQL database successfully");
-            return connection;
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("MySQL Driver not found", e);
+            return taoKetNoiMySQL();
+        } catch (SQLException e) {
+            System.out.println("Failed to connect to MySQL, falling back to H2: " + e.getMessage());
+            return taoKetNoiH2();
         }
     }
 

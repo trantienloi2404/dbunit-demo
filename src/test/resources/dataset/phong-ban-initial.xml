@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <!-- Dữ liệu phòng ban ban đầu cho testing -->
+    <phong_ban 
+        id="1"
+        ma_phong_ban="IT"
+        ten_phong_ban="Công nghệ thông tin"
+        mo_ta="Phòng ban phụ trách công nghệ và phát triển phần mềm"
+        truong_phong="Lê Hoàng Cường"
+        so_nhan_vien="3"
+        trang_thai_hoat_dong="true"/>
+        
+    <phong_ban 
+        id="2"
+        ma_phong_ban="HR"
+        ten_phong_ban="Nhân sự"
+        mo_ta="Phòng ban quản lý nhân sự và tuyển dụng"
+        truong_phong="Trần Thị Bình"
+        so_nhan_vien="1"
+        trang_thai_hoat_dong="true"/>
+        
+    <phong_ban 
+        id="3"
+        ma_phong_ban="FIN"
+        ten_phong_ban="Tài chính"
+        mo_ta="Phòng ban quản lý tài chính và kế toán"
+        truong_phong="Phạm Thị Dung"
+        so_nhan_vien="1"
+        trang_thai_hoat_dong="true"/>
+        
+    <phong_ban 
+        id="4"
+        ma_phong_ban="MKT"
+        ten_phong_ban="Marketing"
+        mo_ta="Phòng ban marketing và bán hàng"
+        truong_phong="Nguyễn Văn Marketing"
+        so_nhan_vien="0"
+        trang_thai_hoat_dong="false"/>
+</dataset> 

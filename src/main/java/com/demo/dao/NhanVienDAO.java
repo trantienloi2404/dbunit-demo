@@ -25,10 +25,19 @@ public class NhanVienDAO {
                 "ho_ten VARCHAR(100) NOT NULL, " +
                 "email VARCHAR(100) UNIQUE NOT NULL, " +
                 "phong_ban VARCHAR(50), " +
+                "phong_ban_id BIGINT, " +
                 "chuc_vu VARCHAR(50), " +
                 "luong DECIMAL(15,2), " +
                 "ngay_vao_lam DATE, " +
-                "trang_thai_hoat_dong BOOLEAN DEFAULT TRUE" +
+                "trang_thai_hoat_dong BOOLEAN DEFAULT TRUE, " +
+                "date_of_birth DATETIME, " +
+                "phone_number VARCHAR(20), " +
+                "avatar_url VARCHAR(255), " +
+                "bio TEXT, " +
+                "sport VARCHAR(100), " +
+                "roles VARCHAR(100), " +
+                "company VARCHAR(100), " +
+                "FOREIGN KEY (phong_ban_id) REFERENCES phong_ban(id)" +
                 ")";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -41,17 +50,36 @@ public class NhanVienDAO {
      * Thêm nhân viên mới vào database
      */
     public void themNhanVien(NhanVien nhanVien) throws SQLException {
-        String sql = "INSERT INTO nhan_vien (ho_ten, email, phong_ban, chuc_vu, luong, ngay_vao_lam, trang_thai_hoat_dong) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO nhan_vien (ho_ten, email, phong_ban, phong_ban_id, chuc_vu, luong, ngay_vao_lam, " +
+                "trang_thai_hoat_dong, date_of_birth, phone_number, avatar_url, bio, sport, roles, company) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, nhanVien.getHoTen());
             stmt.setString(2, nhanVien.getEmail());
             stmt.setString(3, nhanVien.getPhongBan());
-            stmt.setString(4, nhanVien.getChucVu());
-            stmt.setBigDecimal(5, nhanVien.getLuong());
-            stmt.setDate(6, nhanVien.getNgayVaoLam() != null ? new java.sql.Date(nhanVien.getNgayVaoLam().getTime()) : null);
-            stmt.setBoolean(7, nhanVien.getTrangThaiHoatDong() != null ? nhanVien.getTrangThaiHoatDong() : true);
+            if (nhanVien.getPhongBanId() != null) {
+                stmt.setLong(4, nhanVien.getPhongBanId());
+            } else {
+                stmt.setNull(4, java.sql.Types.BIGINT);
+            }
+            stmt.setString(5, nhanVien.getChucVu());
+            stmt.setBigDecimal(6, nhanVien.getLuong());
+            stmt.setDate(7, nhanVien.getNgayVaoLam() != null ? new java.sql.Date(nhanVien.getNgayVaoLam().getTime()) : null);
+            stmt.setBoolean(8, nhanVien.getTrangThaiHoatDong() != null ? nhanVien.getTrangThaiHoatDong() : true);
+            
+            // Thêm các trường mới
+            if (nhanVien.getDateOfBirth() != null) {
+                stmt.setTimestamp(9, java.sql.Timestamp.valueOf(nhanVien.getDateOfBirth()));
+            } else {
+                stmt.setNull(9, java.sql.Types.TIMESTAMP);
+            }
+            stmt.setString(10, nhanVien.getPhoneNumber());
+            stmt.setString(11, nhanVien.getAvatarUrl());
+            stmt.setString(12, nhanVien.getBio());
+            stmt.setString(13, nhanVien.getSport());
+            stmt.setString(14, nhanVien.getRoles());
+            stmt.setString(15, nhanVien.getCompany());
             
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
@@ -127,18 +155,37 @@ public class NhanVienDAO {
      * Cập nhật thông tin nhân viên
      */
     public boolean capNhatNhanVien(NhanVien nhanVien) throws SQLException {
-        String sql = "UPDATE nhan_vien SET ho_ten = ?, email = ?, phong_ban = ?, chuc_vu = ?, " +
-                "luong = ?, ngay_vao_lam = ?, trang_thai_hoat_dong = ? WHERE id = ?";
+        String sql = "UPDATE nhan_vien SET ho_ten = ?, email = ?, phong_ban = ?, phong_ban_id = ?, chuc_vu = ?, " +
+                "luong = ?, ngay_vao_lam = ?, trang_thai_hoat_dong = ?, date_of_birth = ?, phone_number = ?, " +
+                "avatar_url = ?, bio = ?, sport = ?, roles = ?, company = ? WHERE id = ?";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, nhanVien.getHoTen());
             stmt.setString(2, nhanVien.getEmail());
             stmt.setString(3, nhanVien.getPhongBan());
-            stmt.setString(4, nhanVien.getChucVu());
-            stmt.setBigDecimal(5, nhanVien.getLuong());
-            stmt.setDate(6, nhanVien.getNgayVaoLam() != null ? new java.sql.Date(nhanVien.getNgayVaoLam().getTime()) : null);
-            stmt.setBoolean(7, nhanVien.getTrangThaiHoatDong() != null ? nhanVien.getTrangThaiHoatDong() : true);
-            stmt.setLong(8, nhanVien.getId());
+            if (nhanVien.getPhongBanId() != null) {
+                stmt.setLong(4, nhanVien.getPhongBanId());
+            } else {
+                stmt.setNull(4, java.sql.Types.BIGINT);
+            }
+            stmt.setString(5, nhanVien.getChucVu());
+            stmt.setBigDecimal(6, nhanVien.getLuong());
+            stmt.setDate(7, nhanVien.getNgayVaoLam() != null ? new java.sql.Date(nhanVien.getNgayVaoLam().getTime()) : null);
+            stmt.setBoolean(8, nhanVien.getTrangThaiHoatDong() != null ? nhanVien.getTrangThaiHoatDong() : true);
+            
+            // Cập nhật các trường mới
+            if (nhanVien.getDateOfBirth() != null) {
+                stmt.setTimestamp(9, java.sql.Timestamp.valueOf(nhanVien.getDateOfBirth()));
+            } else {
+                stmt.setNull(9, java.sql.Types.TIMESTAMP);
+            }
+            stmt.setString(10, nhanVien.getPhoneNumber());
+            stmt.setString(11, nhanVien.getAvatarUrl());
+            stmt.setString(12, nhanVien.getBio());
+            stmt.setString(13, nhanVien.getSport());
+            stmt.setString(14, nhanVien.getRoles());
+            stmt.setString(15, nhanVien.getCompany());
+            stmt.setLong(16, nhanVien.getId());
             
             int affectedRows = stmt.executeUpdate();
             boolean success = affectedRows > 0;
@@ -208,6 +255,13 @@ public class NhanVienDAO {
         nhanVien.setHoTen(rs.getString("ho_ten"));
         nhanVien.setEmail(rs.getString("email"));
         nhanVien.setPhongBan(rs.getString("phong_ban"));
+        
+        // Xử lý khóa ngoại phong_ban_id
+        Long phongBanId = rs.getLong("phong_ban_id");
+        if (!rs.wasNull()) {
+            nhanVien.setPhongBanId(phongBanId);
+        }
+        
         nhanVien.setChucVu(rs.getString("chuc_vu"));
         nhanVien.setLuong(rs.getBigDecimal("luong"));
         
@@ -217,6 +271,20 @@ public class NhanVienDAO {
         }
         
         nhanVien.setTrangThaiHoatDong(rs.getBoolean("trang_thai_hoat_dong"));
+        
+        // Xử lý các trường mới
+        java.sql.Timestamp dateOfBirth = rs.getTimestamp("date_of_birth");
+        if (dateOfBirth != null) {
+            nhanVien.setDateOfBirth(dateOfBirth.toLocalDateTime());
+        }
+        
+        nhanVien.setPhoneNumber(rs.getString("phone_number"));
+        nhanVien.setAvatarUrl(rs.getString("avatar_url"));
+        nhanVien.setBio(rs.getString("bio"));
+        nhanVien.setSport(rs.getString("sport"));
+        nhanVien.setRoles(rs.getString("roles"));
+        nhanVien.setCompany(rs.getString("company"));
+        
         return nhanVien;
     }
 } 

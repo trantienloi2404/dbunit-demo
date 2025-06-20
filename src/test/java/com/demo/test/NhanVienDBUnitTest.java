@@ -3,6 +3,8 @@ package com.demo.test;
 import com.demo.base.DBUnitBaseTest;
 import com.demo.dao.NhanVienDAO;
 import com.demo.model.NhanVien;
+import com.demo.dao.PhongBanDAO;
+import com.demo.model.PhongBan;
 import org.dbunit.Assertion;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -25,11 +27,38 @@ public class NhanVienDBUnitTest extends DBUnitBaseTest {
     private NhanVienDAO nhanVienDAO;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * Thiết lập schema database cho testing
+     * Tạo bảng nhân viên cho các test cases
+     */
     @Override
     protected void thieLapSchema() throws SQLException {
         System.out.println("Creating employee table schema...");
+        
+        // Tạo bảng phòng ban trước (cần cho foreign key)
+        PhongBanDAO phongBanDAO = new PhongBanDAO(connection);
+        phongBanDAO.taoBangPhongBan();
+        
+        // Thêm một số phòng ban cơ bản cho test
+        PhongBan[] phongBans = {
+            new PhongBan(1L, "IT", "Công nghệ thông tin", "Phát triển phần mềm", "Manager", 0, true),
+            new PhongBan(2L, "HR", "Nhân sự", "Quản lý nhân sự", "Manager", 0, true),
+            new PhongBan(3L, "FIN", "Tài chính", "Kế toán tài chính", "Manager", 0, true)
+        };
+        
+        for (PhongBan pb : phongBans) {
+            try {
+                phongBanDAO.themPhongBan(pb);
+            } catch (SQLException e) {
+                // Ignore if already exists
+            }
+        }
+        
+        // Tạo bảng nhân viên
         nhanVienDAO = new NhanVienDAO(connection);
         nhanVienDAO.taoBangNhanVien();
+        
+        System.out.println("Employee table created successfully");
     }
 
     /**
