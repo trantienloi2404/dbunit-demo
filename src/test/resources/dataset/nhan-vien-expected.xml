@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <!-- Dữ liệu kỳ vọng sau khi thêm nhân viên mới -->
+    <nhan_vien 
+        id="1"
+        ho_ten="Nguyễn Văn An"
+        email="an.nguyen@company.com"
+        phong_ban="IT"
+        chuc_vu="Senior Developer"
+        luong="25000000.00"
+        ngay_vao_lam="2020-01-15"
+        trang_thai_hoat_dong="true"/>
+        
+    <nhan_vien 
+        id="2"
+        ho_ten="Trần Thị Bình"
+        email="binh.tran@company.com"
+        phong_ban="HR"
+        chuc_vu="HR Manager"
+        luong="30000000.00"
+        ngay_vao_lam="2019-03-20"
+        trang_thai_hoat_dong="true"/>
+        
+    <nhan_vien 
+        id="3"
+        ho_ten="Lê Hoàng Cường"
+        email="cuong.le@company.com"
+        phong_ban="IT"
+        chuc_vu="Project Manager"
+        luong="35000000.00"
+        ngay_vao_lam="2018-06-10"
+        trang_thai_hoat_dong="true"/>
+        
+    <nhan_vien 
+        id="4"
+        ho_ten="Phạm Thị Dung"
+        email="dung.pham@company.com"
+        phong_ban="Finance"
+        chuc_vu="Accountant"
+        luong="20000000.00"
+        ngay_vao_lam="2021-09-05"
+        trang_thai_hoat_dong="true"/>
+        
+    <nhan_vien 
+        id="5"
+        ho_ten="Võ Minh Đức"
+        email="duc.vo@company.com"
+        phong_ban="IT"
+        chuc_vu="Junior Developer"
+        luong="15000000.00"
+        ngay_vao_lam="2022-02-28"
+        trang_thai_hoat_dong="false"/>
+        
+    <nhan_vien 
+        id="6"
+        ho_ten="Hoàng Thị Em"
+        email="em.hoang@company.com"
+        phong_ban="Marketing"
+        chuc_vu="Marketing Specialist"
+        luong="18000000.00"
+        ngay_vao_lam="2023-01-10"
+        trang_thai_hoat_dong="true"/>
+</dataset> 
